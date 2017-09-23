@@ -1,0 +1,8 @@
+package app.arbiterlab.ticandroid.library.exceptions;
+
+/**
+ * Created by Gyeongrok Kim on 2017-09-23.
+ */
+
+public class BluetoothNotEnabledException extends Exception {
+}
