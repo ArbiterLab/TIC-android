@@ -35,8 +35,9 @@ public class TICConnection {
     private ManageThread manageThread;
 
 
-    public TICConnection(Context context, BluetoothDevice connectedDevice, ConnectionStateListener connectionStateListener){
-        if (connectedDevice == null || connectionStateListener == null) throw new NullPointerException();
+    public TICConnection(Context context, BluetoothDevice connectedDevice, ConnectionStateListener connectionStateListener) {
+        if (connectedDevice == null || connectionStateListener == null)
+            throw new NullPointerException();
         this.uniqueUUID = UUID.randomUUID().toString();
 
         this.context = context;
@@ -45,7 +46,7 @@ public class TICConnection {
         connectThread = new ConnectThread(this);
     }
 
-    private void registerFetcher(){
+    private void registerFetcher() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("app.arbiterlab.ticandroid." + uniqueUUID);
         broadcastReceiver = new BroadcastReceiver() {
@@ -53,10 +54,11 @@ public class TICConnection {
             public void onReceive(Context context, Intent intent) {
                 final String type = intent.getStringExtra("type");
                 if (type.isEmpty() || connectionStateListener == null) return;
-                if (type.equals(Constants.MESSAGE_STATE_CHANGED)){
-                    connectionStateListener.onStateChanged(TICConnection.this, intent.getBooleanExtra("message", false));
+                if (type.equals(Constants.MESSAGE_STATE_CHANGED)) {
+                    connectionStateListener.onStateChanged(TICConnection.this, intent.getBooleanExtra("state", false)
+                            , intent.getStringExtra("message"));
                 }
-                if (type.equals(Constants.MESSAGE_ON_TEXT)){
+                if (type.equals(Constants.MESSAGE_ON_TEXT)) {
                     connectionStateListener.onMessage(TICConnection.this, intent.getByteArrayExtra("message"));
                 }
             }
@@ -64,7 +66,7 @@ public class TICConnection {
         context.registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    public void cancel(){
+    public void cancel() {
         try {
             connectionBluetoothSocket.close();
         } catch (IOException e) {

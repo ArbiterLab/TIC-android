@@ -7,6 +7,6 @@ import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
  */
 
 public interface ConnectionStateListener {
-    void onStateChanged(TICConnection connection, boolean isConnected);
+    void onStateChanged(TICConnection connection, boolean isConnected, String message);
     void onMessage(TICConnection connection, byte[] message);
 }

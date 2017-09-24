@@ -18,6 +18,12 @@ public class ConnectThread extends Thread {
     private TICConnection ticConnection;
 
     public ConnectThread(TICConnection ticConnection) {
+        final Intent sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
+        sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
+        sendIntent.putExtra("state", false);
+        sendIntent.putExtra("message", "connect execute start");
+        ticConnection.getContext().sendBroadcast(sendIntent);
+
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final
         BluetoothSocket tmp = null;
@@ -34,8 +40,6 @@ public class ConnectThread extends Thread {
     }
 
     public void run() {
-
-
         try {
             // Connect the device through the socket. This will block
             // until it succeeds or throws an exception
@@ -43,7 +47,8 @@ public class ConnectThread extends Thread {
         } catch (IOException connectException) {
             final Intent sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
             sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
-            sendIntent.putExtra("message", false);
+            sendIntent.putExtra("state", false);
+            sendIntent.putExtra("message", "error on create socket");
             ticConnection.getContext().sendBroadcast(sendIntent);
 
             // Unable to connect; close the socket and get out

@@ -41,9 +41,10 @@ class ManageThread extends Thread {
 
         ticConnection.setManageThread(this);
         if (tmpIn !=null && tmpOut != null){
-            sendIntent.putExtra("message", true);
+            sendIntent.putExtra("state", true);
+            sendIntent.putExtra("message", "connected");
         }else{
-            sendIntent.putExtra("message", false);
+            sendIntent.putExtra("state", "error on get streams");
         }
         sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
         ticConnection.getContext().sendBroadcast(sendIntent);
