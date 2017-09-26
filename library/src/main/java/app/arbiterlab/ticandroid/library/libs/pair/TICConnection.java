@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -70,6 +71,7 @@ public class TICConnection {
         try {
             connectionBluetoothSocket.close();
         } catch (IOException e) {
+
         }
         context.unregisterReceiver(broadcastReceiver);
         connectionStateListener = null;

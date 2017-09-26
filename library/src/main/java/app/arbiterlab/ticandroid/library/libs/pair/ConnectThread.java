@@ -3,6 +3,7 @@ package app.arbiterlab.ticandroid.library.libs.pair;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -34,12 +35,18 @@ public class ConnectThread extends Thread {
         try {
             // MY_UUID is the app's UUID string, also used by the server code
             tmp = ticConnection.getConnectedDevice().createRfcommSocketToServiceRecord(Constants.UUID_OTHER_DEVICE);
+
         } catch (IOException e) {
+            Log.d("Debug", "Error ticConnection.getConnectedDevice()");
         }
         mmSocket = tmp;
+
+        //TODO : 강제로 run() 호출했음 스레드.start()로 대체 바람
+        run();
+        Log.d("Debug", "소켓 세팅 / run()");
     }
 
-    public void run() {
+   public void run() {
         try {
             // Connect the device through the socket. This will block
             // until it succeeds or throws an exception
