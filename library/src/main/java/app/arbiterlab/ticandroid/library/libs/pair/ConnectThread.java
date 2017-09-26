@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothSocket;
 import java.io.IOException;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
+import app.arbiterlab.ticandroid.library.datas.Update;
 import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
 import app.arbiterlab.ticandroid.library.libs.Constants;
 
@@ -34,6 +35,7 @@ public class ConnectThread extends Thread {
             // MY_UUID is the app's UUID string, also used by the server code
             tmp = mmDevice.createRfcommSocketToServiceRecord(Constants.UUID_OTHER_DEVICE);
         } catch (IOException e) {
+            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket connect : " + e));
         }
         mmSocket = tmp;
     }
@@ -43,7 +45,9 @@ public class ConnectThread extends Thread {
             // Connect the device through the socket. This will block
             // until it succeeds or throws an exception
             mmSocket.connect();
+            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, true, "successful"));
         } catch (IOException connectException) {
+            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket connect : " + connectException));
             // Unable to connect; close the socket and get out
             try {
                 mmSocket.close();
@@ -55,7 +59,7 @@ public class ConnectThread extends Thread {
         // Do work to manage the connection (in a separate thread)
         connectionContext.setBluetoothSocket(mmSocket);
 
-        ManageThread manageThread = new ManageThread(connectionContext);
+        ManageThread manageThread = new ManageThread(connectionContext, onUpdate);
         manageThread.start();
 
         connectionContext.setManageThread(manageThread);

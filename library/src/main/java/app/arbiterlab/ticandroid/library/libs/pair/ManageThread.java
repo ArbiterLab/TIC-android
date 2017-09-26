@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
+import app.arbiterlab.ticandroid.library.datas.Update;
 import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
+import app.arbiterlab.ticandroid.library.libs.Constants;
 
 /**
  * Created by Gyeongrok Kim on 2017-09-25.
@@ -50,6 +52,7 @@ public class ManageThread extends Thread {
                 // Read from the InputStream
                 bytes = mmInStream.read(buffer);
                 // Send the obtained bytes to the UI activity
+                onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_MESSAGE, bytes));
             } catch (IOException e) {
                 break;
             }
