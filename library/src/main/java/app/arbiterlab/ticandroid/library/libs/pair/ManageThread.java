@@ -1,29 +1,30 @@
 package app.arbiterlab.ticandroid.library.libs.pair;
 
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import app.arbiterlab.ticandroid.library.libs.Constants;
+import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
+import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
 
 /**
  * Created by Gyeongrok Kim on 2017-09-25.
  */
 
-class ManageThread extends Thread {
-    private TICConnection ticConnection;
+public class ManageThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream mmInStream;
     private final OutputStream mmOutStream;
-    private Intent sendIntent;
+    private final OnUpdate onUpdate;
+    private ConnectionContext connectionContext;
 
-    public ManageThread(TICConnection ticConnection) {
-        sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
-        this.ticConnection = ticConnection;
-        mmSocket = ticConnection.getConnectionBluetoothSocket();
+    public ManageThread(ConnectionContext connectionContext, OnUpdate onUpdate) {
+        this.connectionContext = connectionContext;
+        this.onUpdate = onUpdate;
+
+        mmSocket = connectionContext.getBluetoothSocket();
         InputStream tmpIn = null;
         OutputStream tmpOut = null;
 
@@ -37,17 +38,6 @@ class ManageThread extends Thread {
 
         mmInStream = tmpIn;
         mmOutStream = tmpOut;
-
-
-        ticConnection.setManageThread(this);
-        if (tmpIn !=null && tmpOut != null){
-            sendIntent.putExtra("state", true);
-            sendIntent.putExtra("message", "connected");
-        }else{
-            sendIntent.putExtra("state", "error on get streams");
-        }
-        sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
-        ticConnection.getContext().sendBroadcast(sendIntent);
     }
 
     public void run() {
@@ -60,11 +50,6 @@ class ManageThread extends Thread {
                 // Read from the InputStream
                 bytes = mmInStream.read(buffer);
                 // Send the obtained bytes to the UI activity
-
-                sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
-                sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
-                sendIntent.putExtra("message", bytes);
-                ticConnection.getContext().sendBroadcast(sendIntent);
             } catch (IOException e) {
                 break;
             }

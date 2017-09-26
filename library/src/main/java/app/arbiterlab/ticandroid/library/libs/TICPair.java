@@ -64,7 +64,7 @@ public class TICPair {
             context.unregisterReceiver(currentSearchReceiver);
         for (TICConnection ticConnection : ticConnections){
             try {
-                ticConnection.cancel();
+//                ticConnection.cancel();
             }catch (Exception e){
 
             }

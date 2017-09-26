@@ -32,16 +32,15 @@ public class MainActivity extends AppCompatActivity {
         mTICPair.searchDevices(new OnDeviceDetectedListener() {
             @Override
             public void onDetect(BluetoothDevice bluetoothDevice) {
-                if (bluetoothDevice.getAddress().equals("확인하려는 주소")){
+                if (bluetoothDevice.getAddress().equals("80:5A:04:00:90:09")){
                     mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
                         @Override
-                        public void onStateChanged(TICConnection connection, boolean isConnected) {
-
+                        public void onStateChanged(TICConnection connection, boolean isConnected, String message) {
+                            Log.d("bluetoothDeviceDetected", isConnected + ":" + message);
                         }
 
                         @Override
                         public void onMessage(TICConnection connection, byte[] message) {
-
                         }
                     });
                 }

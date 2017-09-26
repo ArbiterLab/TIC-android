@@ -2,10 +2,11 @@ package app.arbiterlab.ticandroid.library.libs.pair;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 
 import java.io.IOException;
 
+import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
+import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
 import app.arbiterlab.ticandroid.library.libs.Constants;
 
 /**
@@ -13,27 +14,25 @@ import app.arbiterlab.ticandroid.library.libs.Constants;
  */
 
 public class ConnectThread extends Thread {
+
+    private ConnectionContext connectionContext;
     private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
-    private TICConnection ticConnection;
+    private final OnUpdate onUpdate;
 
-    public ConnectThread(TICConnection ticConnection) {
-        final Intent sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
-        sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
-        sendIntent.putExtra("state", false);
-        sendIntent.putExtra("message", "connect execute start");
-        ticConnection.getContext().sendBroadcast(sendIntent);
-
+    public ConnectThread(final ConnectionContext connectionContext, final OnUpdate onUpdate) {
         // Use a temporary object that is later assigned to mmSocket,
         // because mmSocket is final
         BluetoothSocket tmp = null;
-        this.mmDevice = ticConnection.getConnectedDevice();
-        this.ticConnection = ticConnection;
+
+        this.onUpdate = onUpdate;
+        this.connectionContext = connectionContext;
+        this.mmDevice = connectionContext.getBluetoothDevice();
 
         // Get a BluetoothSocket to connect with the given BluetoothDevice
         try {
             // MY_UUID is the app's UUID string, also used by the server code
-            tmp = ticConnection.getConnectedDevice().createRfcommSocketToServiceRecord(Constants.UUID_OTHER_DEVICE);
+            tmp = mmDevice.createRfcommSocketToServiceRecord(Constants.UUID_OTHER_DEVICE);
         } catch (IOException e) {
         }
         mmSocket = tmp;
@@ -45,23 +44,21 @@ public class ConnectThread extends Thread {
             // until it succeeds or throws an exception
             mmSocket.connect();
         } catch (IOException connectException) {
-            final Intent sendIntent = new Intent("app.arbiterlab.ticandroid." + ticConnection.uniqueUUID);
-            sendIntent.putExtra("type", Constants.MESSAGE_STATE_CHANGED);
-            sendIntent.putExtra("state", false);
-            sendIntent.putExtra("message", "error on create socket");
-            ticConnection.getContext().sendBroadcast(sendIntent);
-
             // Unable to connect; close the socket and get out
             try {
                 mmSocket.close();
             } catch (IOException closeException) {
+
             }
             return;
         }
-
         // Do work to manage the connection (in a separate thread)
-        ticConnection.setConnectionBluetoothSocket(mmSocket);
-        new ManageThread(ticConnection);
+        connectionContext.setBluetoothSocket(mmSocket);
+
+        ManageThread manageThread = new ManageThread(connectionContext);
+        manageThread.start();
+
+        connectionContext.setManageThread(manageThread);
     }
 
     /**
