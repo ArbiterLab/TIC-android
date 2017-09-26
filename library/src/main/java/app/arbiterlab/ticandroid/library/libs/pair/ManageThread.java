@@ -52,7 +52,7 @@ public class ManageThread extends Thread {
                 // Read from the InputStream
                 bytes = mmInStream.read(buffer);
                 // Send the obtained bytes to the UI activity
-                onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_MESSAGE, bytes));
+                onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_MESSAGE, true, bytes, buffer));
             } catch (IOException e) {
                 break;
             }

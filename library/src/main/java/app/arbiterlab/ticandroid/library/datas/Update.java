@@ -8,18 +8,12 @@ public class Update {
     private ConnectionContext connectionContext;
     private int requestCode;
     private boolean state;
-    private Object message;
+    private Object[] message;
 
-    public Update(ConnectionContext connectionContext, int requestCode, boolean state, Object message) {
+    public Update(ConnectionContext connectionContext, int requestCode, boolean state, Object... message) {
         this.connectionContext = connectionContext;
         this.requestCode = requestCode;
         this.state = state;
-        this.message = message;
-    }
-
-    public Update(ConnectionContext connectionContext, int requestCode, Object message) {
-        this.connectionContext = connectionContext;
-        this.requestCode = requestCode;
         this.message = message;
     }
 
@@ -47,11 +41,11 @@ public class Update {
         this.state = state;
     }
 
-    public Object getMessage() {
+    public Object[] getMessage() {
         return message;
     }
 
-    public void setMessage(Object message) {
+    public void setMessage(Object[] message) {
         this.message = message;
     }
 }

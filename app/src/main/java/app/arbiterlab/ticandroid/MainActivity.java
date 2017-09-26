@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onMessage(TICConnection connection, byte[] message) {
+                        public void onMessage(TICConnection connection, int bytes, byte[] message) {
+
                         }
                     });
                 }
