@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothSocket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
 import app.arbiterlab.ticandroid.library.datas.Update;
@@ -43,17 +44,27 @@ public class ManageThread extends Thread {
     }
 
     public void run() {
-        byte[] buffer = new byte[1024];  // buffer store for the stream
-        int bytes; // bytes returned from read()
+        byte[] buffer;
+        ArrayList<Integer> arr_byte = new ArrayList<Integer>();
 
-        // Keep listening to the InputStream until an exception occurs
+        // Keep listening to the InputStream while connected
         while (true) {
             try {
-                // Read from the InputStream
-                bytes = mmInStream.read(buffer);
-                // Send the obtained bytes to the UI activity
-                onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_MESSAGE, true, bytes, buffer));
+                int data = mmInStream.read();
+                if(data == 0x0A) {
+                } else if(data == 0x0D) {
+                    buffer = new byte[arr_byte.size()];
+                    for(int i = 0 ; i < arr_byte.size() ; i++) {
+                        buffer[i] = arr_byte.get(i).byteValue();
+                    }
+                    // Send the obtained bytes to the UI Activity
+                    onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_MESSAGE, true, buffer.length, buffer));
+                    arr_byte = new ArrayList<Integer>();
+                } else {
+                    arr_byte.add(data);
+                }
             } catch (IOException e) {
+                start();
                 break;
             }
         }
