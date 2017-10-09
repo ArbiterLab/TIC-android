@@ -25,7 +25,7 @@ public class TIC {
 
     private BluetoothSocket sSocket;
 
-    protected TIC(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
+    public TIC(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         if (device == null || connectionStateListener == null)
             throw new NullPointerException();
 
