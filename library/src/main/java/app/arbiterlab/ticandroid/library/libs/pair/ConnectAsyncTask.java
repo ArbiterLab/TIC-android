@@ -54,15 +54,15 @@ public class ConnectAsyncTask extends AsyncTask<Integer, Object, Integer> {
         if (update == null) return;
 
         connectionContext = update.getConnectionContext();
-        connectionContext.getTicConnection().setConnectionContext(connectionContext);
+        connectionContext.getTic().setConnectionContext(connectionContext);
 
         switch (update.getRequestCode()) {
             case Constants.RESULT_STATECHANGED:
-                connectionStateListener.onStateChanged(update.getConnectionContext().getTicConnection(),
+                connectionStateListener.onStateChanged(update.getConnectionContext().getTic(),
                         update.isState(), (String) update.getMessage()[0]);
                 break;
             case Constants.RESULT_MESSAGE:
-                connectionStateListener.onMessage(update.getConnectionContext().getTicConnection(),
+                connectionStateListener.onMessage(update.getConnectionContext().getTic(),
                         (int) update.getMessage()[0], (byte[]) update.getMessage()[1]);
                 break;
         }

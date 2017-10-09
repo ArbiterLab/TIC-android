@@ -17,7 +17,7 @@ import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
  * Created by Gyeongrok Kim on 2017-09-25.
  */
 
-public class TICConnection {
+public class TIC {
     private Context context;
     private ConnectionStateListener connectionStateListener;
     private ConnectionContext connectionContext;
@@ -25,7 +25,7 @@ public class TICConnection {
 
     private BluetoothSocket sSocket;
 
-    public TICConnection(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
+    protected TIC(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         if (device == null || connectionStateListener == null)
             throw new NullPointerException();
 

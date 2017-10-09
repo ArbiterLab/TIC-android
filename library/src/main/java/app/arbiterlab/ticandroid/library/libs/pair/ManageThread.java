@@ -44,6 +44,7 @@ public class ManageThread extends Thread {
     }
 
     public void run() {
+
         byte[] buffer;
         ArrayList<Integer> arr_byte = new ArrayList<Integer>();
 

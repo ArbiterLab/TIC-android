@@ -6,7 +6,7 @@ import android.bluetooth.BluetoothSocket;
 import app.arbiterlab.ticandroid.library.libs.pair.ConnectAsyncTask;
 import app.arbiterlab.ticandroid.library.libs.pair.ConnectThread;
 import app.arbiterlab.ticandroid.library.libs.pair.ManageThread;
-import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
+import app.arbiterlab.ticandroid.library.libs.pair.TIC;
 
 /**
  * Created by Gyeongrok Kim on 2017-09-27.
@@ -15,7 +15,7 @@ import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
 public class ConnectionContext {
     private String UUID;
 
-    private TICConnection ticConnection;
+    private TIC tic;
 
     private BluetoothDevice bluetoothDevice;
     private ConnectAsyncTask connectAsyncTask;
@@ -23,10 +23,10 @@ public class ConnectionContext {
     private ManageThread manageThread;
     private BluetoothSocket bluetoothSocket;
 
-    public ConnectionContext(String UUID, TICConnection ticConnection, BluetoothDevice bluetoothDevice) {
+    public ConnectionContext(String UUID, TIC tic, BluetoothDevice bluetoothDevice) {
         this.UUID = UUID;
         this.bluetoothDevice = bluetoothDevice;
-        this.ticConnection = ticConnection;
+        this.tic = tic;
     }
 
     public String getUUID() {
@@ -69,11 +69,11 @@ public class ConnectionContext {
         this.manageThread = manageThread;
     }
 
-    public TICConnection getTicConnection() {
-        return ticConnection;
+    public TIC getTic() {
+        return tic;
     }
 
-    public void setTicConnection(TICConnection ticConnection) {
-        this.ticConnection = ticConnection;
+    public void setTic(TIC tic) {
+        this.tic = tic;
     }
 }

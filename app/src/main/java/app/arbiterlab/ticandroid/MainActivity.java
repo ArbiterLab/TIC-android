@@ -13,14 +13,14 @@ import android.widget.TextView;
 
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
-import app.arbiterlab.ticandroid.library.libs.TIC;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
-import app.arbiterlab.ticandroid.library.libs.pair.ManageThread;
-import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
+import app.arbiterlab.ticandroid.library.libs.pair.TIC;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
 
 public class MainActivity extends AppCompatActivity {
+
     private TICPair mTICPair;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +37,19 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        mTICPair = TIC.init(this);
+        mTICPair = new TICPair(this);
         mTICPair.searchDevices(new OnDeviceDetectedListener() {
             @Override
             public void onDetect(BluetoothDevice bluetoothDevice) {
-                if (bluetoothDevice.getAddress().equals(bluetoothDevice.getAddress())){
-                    mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
+                if (bluetoothDevice.getAddress().equals(bluetoothDevice.getAddress())) {
+                    final TIC tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
                         @Override
-                        public void onStateChanged(TICConnection connection, boolean isConnected, String message) {
+                        public void onStateChanged(TIC connection, boolean isConnected, String message) {
                             Log.d("bluetoothDeviceDetected", isConnected + ":" + message);
                         }
 
                         @Override
-                        public void onMessage(TICConnection connection, int bytes, byte[] message) {
+                        public void onMessage(TIC connection, int bytes, byte[] message) {
                             String output = new String(message);
                             Log.d("output", output);
                             mainText.setText("Message : " + output);
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String sendData = editText.getText().toString();
-
                 //TODO : TICConnection에 sendText() 구현해둠 막 구현해봄 맞는지 확인이랑 TICPair에서 TIC커넥션 객체받아서
             }
         });
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            mTICPair = TIC.init(this);
+            mTICPair = new TICPair(this);
             mTICPair.searchDevices(new OnDeviceDetectedListener() {
                 @Override
                 public void onDetect(BluetoothDevice bluetoothDevice) {

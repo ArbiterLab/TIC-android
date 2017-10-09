@@ -6,14 +6,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Set;
 
+import app.arbiterlab.ticandroid.library.exceptions.BluetoothNotEnabledException;
+import app.arbiterlab.ticandroid.library.exceptions.DeviceNotSupportBluetoothException;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
-import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
+import app.arbiterlab.ticandroid.library.libs.pair.TIC;
+import app.arbiterlab.ticandroid.library.utils.TICUtils;
 
 /**
  * Created by Gyeongrok Kim on 2017-09-23.
@@ -25,14 +27,21 @@ public class TICPair {
     private BluetoothAdapter bluetoothAdapter;
     private Context context;
 
-    private ArrayList<TICConnection> ticConnections = new ArrayList<>();
+    private ArrayList<TIC> tics = new ArrayList<>();
 
-    public TICPair(Context context, BluetoothAdapter bluetoothAdapter) {
+    public TICPair(Context context) throws DeviceNotSupportBluetoothException, BluetoothNotEnabledException {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!TICUtils.isDeviceSupportBluetooth()) {
+            throw new DeviceNotSupportBluetoothException();
+        }
+        if (!TICUtils.isBluetoothEnabled()) {
+            throw new BluetoothNotEnabledException();
+        }
+
         if (bluetoothAdapter == null)
-            throw new NullPointerException("bluetoothAdapter should be initialized");
+            throw new NullPointerException("error on bluetoothAdapter initialized");
 
         this.context = context;
-        this.bluetoothAdapter = bluetoothAdapter;
     }
 
     public Set<BluetoothDevice> getPairedDevices() {
@@ -63,20 +72,21 @@ public class TICPair {
     public void detach() {
         if (currentSearchReceiver != null)
             context.unregisterReceiver(currentSearchReceiver);
-        for (TICConnection ticConnection : ticConnections){
+        for (TIC tic : tics) {
             try {
-//                ticConnection.cancel();
-            }catch (Exception e){
+//                tic.cancel();
+            } catch (Exception e) {
             }
         }
     }
 
-    public void connect(BluetoothDevice device, ConnectionStateListener connectionStateListener) {
+    public TIC connect(BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         // Cancel discovery because it will slow down the connection
         bluetoothAdapter.cancelDiscovery();
-        ticConnections.add(new TICConnection(context, device, connectionStateListener));
+
+        final TIC tic = new TIC(context, device, connectionStateListener);
+        tics.add(tic);
+        return tic;
     }
-
-
 
 }
