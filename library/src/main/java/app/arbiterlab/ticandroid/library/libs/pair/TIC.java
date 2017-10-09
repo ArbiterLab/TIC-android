@@ -8,9 +8,7 @@ import android.os.AsyncTask;
 import java.util.UUID;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
-import app.arbiterlab.ticandroid.library.datas.Update;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
-import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
 
 
 /**
@@ -51,14 +49,7 @@ public class TIC {
 
     public void sendText(String data) { //TODO : 여기 제대로 동작하나 확인!!!
         sSocket = connectionContext.getBluetoothSocket();
-
         byte[] sendData = data.getBytes();
-
-        ManageThread testSend = new ManageThread(connectionContext, new OnUpdate() {
-            @Override
-            public void OnUpdate(Update update) {
-            }
-        });
-        testSend.write(sendData);
+        connectionContext.getManageThread().write(sendData);
     }
 }

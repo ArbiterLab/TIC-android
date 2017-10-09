@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mTICPair.searchDevices(new OnDeviceDetectedListener() {
             @Override
             public void onDetect(BluetoothDevice bluetoothDevice) {
-                if (bluetoothDevice.getAddress().equals(bluetoothDevice.getAddress())) {
+                if (bluetoothDevice.getAddress().equals("YOUR DEVICE MAC ADDRESS")) {
                     final TIC tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
                         @Override
                         public void onStateChanged(TIC connection, boolean isConnected, String message) {
@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("output", output);
                             mainText.setText("Message : " + output);
                         }
+
                     });
                 }
-                Log.d("bluetoothDeviceDetected", "new Device : " + bluetoothDevice.getName() + "/" + bluetoothDevice.getAddress());
             }
         });
 
