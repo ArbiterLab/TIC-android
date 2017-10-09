@@ -4,18 +4,11 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
-import app.arbiterlab.ticandroid.library.datas.TicParam;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
-import app.arbiterlab.ticandroid.library.interfaces.TicAPI;
 
 
 /**
@@ -83,9 +76,8 @@ public class TIC {
         }
     }
 
-    public void sendText(String data) { //TODO : 여기 제대로 동작하나 확인!!!
-        sSocket = connectionContext.getBluetoothSocket();
-        byte[] sendData = data.getBytes();
-        connectionContext.getManageThread().write(sendData);
+    public void sendText(String data) {
+        data += "\n";
+        connectionContext.getManageThread().write(data.getBytes());
     }
 }
