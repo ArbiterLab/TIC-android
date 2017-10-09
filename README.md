@@ -10,6 +10,12 @@ and using there API on android with TIC-android.
 
 # How to use?
 
+## Sorry for complex
+
+We are not upload our library on any repository. this time, you should add our library module
+https://github.com/ArbiterLab/TIC-android/tree/master/library
+We will improve this soon.
+
 Assume API you want to use is created successfully, you can using there API following this step.
 
 Before we start, these permissions should be writed on Android Manifest
