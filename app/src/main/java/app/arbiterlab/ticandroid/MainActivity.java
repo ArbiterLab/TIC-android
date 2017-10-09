@@ -10,11 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
 import app.arbiterlab.ticandroid.library.libs.pair.TIC;
+import app.arbiterlab.ticandroid.library.models.MusicSpeakerModel;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         final EditText editText = (EditText) findViewById(R.id.editText);
         Button buttonTest = (Button) findViewById(R.id.button);
 
+
+        if (!TICUtils.isNeedPermissionsGranted(this)){
+            Toast.makeText(this, "ACCESS_COARSE_LOCATION PERMISSION NEED GRANT", Toast.LENGTH_SHORT).show();
+        }
         if (!TICUtils.isDeviceSupportBluetooth()) return;
         if (!TICUtils.isBluetoothEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -56,10 +62,13 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     });
+
+
+                    MusicSpeakerModel musicSpeakerModel = new MusicSpeakerModel(tic);
+                    musicSpeakerModel.play();
                 }
             }
         });
-
         buttonTest.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {

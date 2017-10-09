@@ -73,8 +73,10 @@ public class ManageThread extends Thread {
 
     /* Call this from the main activity to send data to the remote device */
     public void write(byte[] bytes) {
+
         try {
             mmOutStream.write(bytes);
+
         } catch (IOException e) {
         }
     }
