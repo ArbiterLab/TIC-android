@@ -1,7 +1,3 @@
-
-
-
-
 # Library TIC for Android
 
 Library TIC, the simple modifier of IoT API. our library helping developer of generating device API, and developer of using API for 3-rd party application.
@@ -16,13 +12,33 @@ and using there API on android with TIC-android.
 
 Assume API you want to use is created successfully, you can using there API following this step.
 
+Before we start, these permissions should be writed on Android Manifest
+
+```xml
+<uses-permission android:name="android.permission.BLUETOOTH" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+on Mashmello (6.0+) , "android.permission.ACCESS_COARSE_LOCATION" permission  should be granted by separate request.
+
+[Permission Request (Reference)]: https://developer.android.com/training/permissions/requesting.html
+
+Maybe, We are throw runtime exception if "ACCESS_COARSE_LOACTION" permission is not granted.
+
+
+
 First, you shuld verify if device supports bluetooth connect and it can use with our methods.
 
 ```java
+if (!TICUtils.isNeedPermissionsGranted(this)){
+ 	Toast.makeText(this, "ACCESS_COARSE_LOCATION PERMISSION NEED GRANT",Toast.LENGTH_SHORT).show();
+}
 if (!TICUtils.isDeviceSupportBluetooth()) return;
 if (!TICUtils.isBluetoothEnabled()) {
 	Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 	startActivityForResult(enableBtIntent, 100);
+	return;
 }
 ```
 
