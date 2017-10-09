@@ -1,3 +1,7 @@
+
+
+
+
 # Library TIC for Android
 
 Library TIC, the simple modifier of IoT API. our library helping developer of generating device API, and developer of using API for 3-rd party application.
@@ -64,25 +68,24 @@ As a result, this looks like code to create a connection after a search.
 
 ```java
 mTICPair.searchDevices(new OnDeviceDetectedListener() {
-	@Override
-	public void onDetect(BluetoothDevice bluetoothDevice) {
-		if (bluetoothDevice.getAddress().equals("YOUR DEVICE MAC ADDRESS")) {
-			final TIC tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
-				@Override
-				public void onStateChanged(TIC connection, boolean isConnected, String message)					{
-                  // on state changed (connected, disconnected etc..)
-				}
-           
-                @Override
-				public void onMessage(TIC connection, int bytes, byte[] message) 
-                {
-					String output = new String(message);
-					Log.d("output", output);
-					mainText.setText("Message : " + output);
-				}
-			});
-		}
-	}
+ @Override
+  public void onDetect(BluetoothDevice bluetoothDevice) {
+   if (bluetoothDevice.getAddress().equals("YOUR DEVICE MAC ADDRESS")) {
+   final TIC tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
+    @Override
+     public void onStateChanged(TIC connection, boolean isConnected, String message) {
+      // on state changed (connected, disconnected etc..)
+     }      
+    
+    @Override
+     public void onMessage(TIC connection, int bytes, byte[] message) {
+      String output = new String(message);
+      Log.d("output", output);
+      mainText.setText("Message : " + output);
+     }
+   });
+  }
+ }
 });
 ```
 
