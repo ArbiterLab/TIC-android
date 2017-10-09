@@ -20,6 +20,7 @@ import app.arbiterlab.ticandroid.library.utils.TICUtils;
 public class MainActivity extends AppCompatActivity {
 
     private TICPair mTICPair;
+    private TIC tic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         mTICPair.searchDevices(new OnDeviceDetectedListener() {
             @Override
             public void onDetect(BluetoothDevice bluetoothDevice) {
-                if (bluetoothDevice.getAddress().equals("YOUR DEVICE MAC ADDRESS")) {
-                    final TIC tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
+                if (bluetoothDevice.getAddress().equals(bluetoothDevice.getAddress())) {
+                    tic = mTICPair.connect(bluetoothDevice, new ConnectionStateListener() {
                         @Override
                         public void onStateChanged(TIC connection, boolean isConnected, String message) {
                             Log.d("bluetoothDeviceDetected", isConnected + ":" + message);
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("output", output);
                             mainText.setText("Message : " + output);
                         }
-
                     });
                 }
+                Log.d("bluetoothDeviceDetected", "new Device : " + bluetoothDevice.getName() + "/" + bluetoothDevice.getAddress());
             }
         });
 
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String sendData = editText.getText().toString();
-                //TODO : TICConnection에 sendText() 구현해둠 막 구현해봄 맞는지 확인이랑 TICPair에서 TIC커넥션 객체받아서
+            
+                tic.sendText(sendData);
             }
         });
     }

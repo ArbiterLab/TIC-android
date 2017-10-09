@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.UUID;
 
@@ -19,9 +20,6 @@ public class TIC {
     private Context context;
     private ConnectionStateListener connectionStateListener;
     private ConnectionContext connectionContext;
-
-
-    private BluetoothSocket sSocket;
 
     public TIC(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         if (device == null || connectionStateListener == null)
@@ -47,9 +45,9 @@ public class TIC {
         this.connectionContext = connectionContext;
     }
 
-    public void sendText(String data) { //TODO : 여기 제대로 동작하나 확인!!!
-        sSocket = connectionContext.getBluetoothSocket();
-        byte[] sendData = data.getBytes();
-        connectionContext.getManageThread().write(sendData);
+    public void sendText(String data) {
+        data += "\n";
+        connectionContext.getManageThread().write(data);
+
     }
 }

@@ -1,6 +1,7 @@
 package app.arbiterlab.ticandroid.library.libs.pair;
 
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +38,12 @@ public class ManageThread extends Thread {
             tmpIn = mmSocket.getInputStream();
             tmpOut = mmSocket.getOutputStream();
         } catch (IOException e) {
+
         }
 
         mmInStream = tmpIn;
         mmOutStream = tmpOut;
+
     }
 
     public void run() {
@@ -72,10 +75,14 @@ public class ManageThread extends Thread {
     }
 
     /* Call this from the main activity to send data to the remote device */
-    public void write(byte[] bytes) {
+    public void write(String data) {
+
         try {
-            mmOutStream.write(bytes);
+            byte[] _data = data.getBytes();
+            mmOutStream.write(_data);
+
         } catch (IOException e) {
+
         }
     }
 
@@ -84,6 +91,7 @@ public class ManageThread extends Thread {
         try {
             mmSocket.close();
         } catch (IOException e) {
+
         }
     }
 }
