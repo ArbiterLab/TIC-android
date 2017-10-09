@@ -24,7 +24,7 @@ on Mashmello (6.0+) , "android.permission.ACCESS_COARSE_LOCATION" permission  sh
 
 [Permission Request (Reference)]: https://developer.android.com/training/permissions/requesting.html
 
-Maybe, We are throw runtime exception if "ACCESS_COARSE_LOACTION" permission is not granted.
+Maybe, We are throw runtime exception if "ACCESS_COARSE_LOACTION" perision is not granted.
 
 
 
@@ -112,3 +112,55 @@ This is exemplary detach TICPair on application finish. (like onDestroy())
 ```java
 mTICPair.detach();
 ```
+
+# TIC Model
+
+We are provide sort of models for IoT device has a similar function. If using same model for similar devices. It is more efficient than each devices API.
+
+Now, because it's in beta. We brought some models as an example. this time, We provide MusicSpeakerModel, ChatModel, DeviceControllModel.
+
+You can make API call like this.
+
+```java
+MusicSpeakerModel musicSpeakerModel = new MusicSpeakerModel(tic);
+musicSpeakerModel.play(new TicParam("musicPath", "/~/path/xxx.mp3"), new TicParam("timerTime", "30s") );
+// or
+musicSpeakerModel.stop();
+```
+
+```java
+DeviceControllModel deviceControllModel = new DeviceControllModel(tic);
+deviceControllModel.getDeviceStatus(new TicParam("req", "modelNum, supportMethods"));
+deviceControllModel.setDeviceOff();
+```
+
+and there request convert to JSON, and send to IoT devices.
+
+```json
+{"path":"\/play","params":[{"location":"\/~~\/~"},{"location":"\/~~\/~"},{"location":"\/~~\/~"}]}
+```
+
+If you want make your own API call, following this.
+
+```java
+public class CustomModel {
+
+    private TIC tic;
+
+    public CustomModel(TIC tic){
+        this.tic = tic;
+    }
+
+    @TicAPI("/api~/custom1")
+    public void custom1(TicParam... params){
+        tic.work(params);
+    }
+
+    @TicAPI("/api~/custom2")
+    public void custom2(TicParam... params){
+        tic.work(params);
+    }
+}
+```
+
+In any case, declare the tic.work () on method body that you want request. and should delcare your API path in annotation.
