@@ -15,6 +15,7 @@ import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
 import app.arbiterlab.ticandroid.library.libs.TIC;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
+import app.arbiterlab.ticandroid.library.libs.pair.ManageThread;
 import app.arbiterlab.ticandroid.library.libs.pair.TICConnection;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
 
@@ -62,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
         buttonTest.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                byte[] sendData = editText.getText().toString().getBytes();
+                String sendData = editText.getText().toString();
 
+                //TODO : TICConnection에 sendText() 구현해둠 막 구현해봄 맞는지 확인이랑 TICPair에서 TIC커넥션 객체받아서
             }
         });
     }

@@ -25,13 +25,12 @@
         android:layout_height="41dp"
         android:layout_above="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="53dp"
+        android:layout_marginBottom="22dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="input"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:text="input" />
+        tools:layout_editor_absoluteY="0dp" />
 
     <Button
         android:id="@+id/button"
@@ -40,6 +39,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="185dp"
-        android:text="Button" />
+        android:text="SEND" />
 
 </RelativeLayout>

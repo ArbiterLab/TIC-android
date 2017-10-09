@@ -77,4 +77,6 @@ public class TICPair {
         ticConnections.add(new TICConnection(context, device, connectionStateListener));
     }
 
+
+
 }

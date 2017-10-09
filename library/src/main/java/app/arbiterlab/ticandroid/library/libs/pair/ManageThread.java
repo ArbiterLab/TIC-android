@@ -79,7 +79,7 @@ public class ManageThread extends Thread {
     }
 
     /* Call this from the main activity to shutdown the connection */
-    public void cancel() {
+    public void  cancel() {
         try {
             mmSocket.close();
         } catch (IOException e) {
