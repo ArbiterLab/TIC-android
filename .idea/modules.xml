@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TIC-android.iml" filepath="$PROJECT_DIR$/TIC-android.iml" />
       <module fileurl="file://D:\TICAndroid\TIC-android.iml" filepath="D:\TICAndroid\TIC-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TICAndroid.iml" filepath="$PROJECT_DIR$/TICAndroid.iml" />
       <module fileurl="file://C:\Users\LAINO\Desktop\TIC-android\TICAndroid.iml" filepath="C:\Users\LAINO\Desktop\TIC-android\TICAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />

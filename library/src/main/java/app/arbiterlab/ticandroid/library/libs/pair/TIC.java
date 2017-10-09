@@ -4,11 +4,18 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
+import app.arbiterlab.ticandroid.library.datas.TicParam;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
+import app.arbiterlab.ticandroid.library.interfaces.TicAPI;
 
 
 /**
@@ -69,7 +76,7 @@ public class TIC {
                 paramsJSON.put(param);
             }
 
-            connectionContext.getManageThread().write(paramsJSON.toString().getBytes());
+            sendText(paramsJSON.toString());
         } catch (Exception e1) {
             e1.printStackTrace();
             Log.d("resultParam", e1+"");
