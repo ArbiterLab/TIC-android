@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onMessage(TICConnection connection, int bytes, byte[] message) {
                             String output = new String(message);
                             Log.d("output", output);
-                            mainText.setText("Message" + output);
+                            mainText.setText("Message : " + output);
                         }
                     });
                 }
