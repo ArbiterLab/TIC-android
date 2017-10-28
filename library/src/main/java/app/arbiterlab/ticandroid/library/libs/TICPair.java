@@ -12,6 +12,7 @@ import java.util.Set;
 
 import app.arbiterlab.ticandroid.library.exceptions.BluetoothNotEnabledException;
 import app.arbiterlab.ticandroid.library.exceptions.DeviceNotSupportBluetoothException;
+import app.arbiterlab.ticandroid.library.exceptions.PermissionNotGrantedException;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
 import app.arbiterlab.ticandroid.library.libs.pair.TIC;
@@ -31,6 +32,10 @@ public class TICPair {
 
     public TICPair(Context context) throws DeviceNotSupportBluetoothException, BluetoothNotEnabledException {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (!TICUtils.isNeedPermissionsGranted(context)) {
+            throw new PermissionNotGrantedException();
+        }
         if (!TICUtils.isDeviceSupportBluetooth()) {
             throw new DeviceNotSupportBluetoothException();
         }
@@ -67,6 +72,7 @@ public class TICPair {
         bluetoothAdapter.startDiscovery();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         context.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+        currentSearchReceiver = mReceiver;
     }
 
     public void detach() {
@@ -80,7 +86,7 @@ public class TICPair {
         }
     }
 
-    public TIC connect(BluetoothDevice device, ConnectionStateListener connectionStateListener) {
+    public TIC open(BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         // Cancel discovery because it will slow down the connection
         bluetoothAdapter.cancelDiscovery();
 

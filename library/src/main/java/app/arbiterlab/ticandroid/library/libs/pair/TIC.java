@@ -34,10 +34,10 @@ public class TIC {
         if (device == null || connectionStateListener == null)
             throw new NullPointerException();
 
-        // import connect thread, library connection
+        // import open thread, library connection
         connectionContext = new ConnectionContext(UUID.randomUUID().toString(), this, device);
 
-        // connect task execute
+        // open task execute
         ConnectAsyncTask connectAsyncTask = new ConnectAsyncTask(connectionContext, connectionStateListener);
         connectAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
     }

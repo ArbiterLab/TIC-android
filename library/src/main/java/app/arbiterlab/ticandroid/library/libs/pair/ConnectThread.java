@@ -30,12 +30,12 @@ public class ConnectThread extends Thread {
         this.connectionContext = connectionContext;
         this.mmDevice = connectionContext.getBluetoothDevice();
 
-        // Get a BluetoothSocket to connect with the given BluetoothDevice
+        // Get a BluetoothSocket to open with the given BluetoothDevice
         try {
             // MY_UUID is the app's UUID string, also used by the server code
             tmp = mmDevice.createRfcommSocketToServiceRecord(Constants.UUID_OTHER_DEVICE);
         } catch (IOException e) {
-            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket connect : " + e));
+            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket open : " + e));
         }
         mmSocket = tmp;
     }
@@ -47,8 +47,8 @@ public class ConnectThread extends Thread {
             mmSocket.connect();
             onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, true, "successful"));
         } catch (IOException connectException) {
-            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket connect : " + connectException));
-            // Unable to connect; close the socket and get out
+            onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on socket open : " + connectException));
+            // Unable to open; close the socket and get out
             try {
                 mmSocket.close();
             } catch (IOException closeException) {
