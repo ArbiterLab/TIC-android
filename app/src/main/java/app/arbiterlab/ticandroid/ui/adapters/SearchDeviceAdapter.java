@@ -1,4 +1,4 @@
-package app.arbiterlab.ticandroid;
+package app.arbiterlab.ticandroid.ui.adapters;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import app.arbiterlab.ticandroid.R;
 
 /**
  * Created by Gyeongrok Kim on 2017-10-26.

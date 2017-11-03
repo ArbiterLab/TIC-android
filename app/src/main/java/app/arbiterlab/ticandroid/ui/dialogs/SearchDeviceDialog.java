@@ -1,4 +1,4 @@
-package app.arbiterlab.ticandroid;
+package app.arbiterlab.ticandroid.ui.dialogs;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import app.arbiterlab.ticandroid.R;
+import app.arbiterlab.ticandroid.ui.adapters.SearchDeviceAdapter;
 import app.arbiterlab.ticandroid.library.interfaces.OnDeviceDetectedListener;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
 

@@ -1,4 +1,4 @@
-package app.arbiterlab.ticandroid;
+package app.arbiterlab.ticandroid.ui.activities;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import app.arbiterlab.ticandroid.R;
 import app.arbiterlab.ticandroid.databinding.ActivityMainBinding;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
 import app.arbiterlab.ticandroid.library.libs.pair.TIC;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
+import app.arbiterlab.ticandroid.ui.dialogs.SearchDeviceDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            showSearchDeviceDialog();
         }
     }
 }
