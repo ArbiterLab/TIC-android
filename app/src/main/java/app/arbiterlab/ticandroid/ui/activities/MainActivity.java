@@ -20,6 +20,7 @@ import app.arbiterlab.ticandroid.library.libs.pair.TIC;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
 import app.arbiterlab.ticandroid.ui.adapters.ConnectedDeviceAdapter;
 import app.arbiterlab.ticandroid.ui.dialogs.DeviceDialog;
+import app.arbiterlab.ticandroid.ui.dialogs.NewMessageDialog;
 import app.arbiterlab.ticandroid.ui.dialogs.SearchDeviceDialog;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,39 +57,39 @@ public class MainActivity extends AppCompatActivity {
         footerTextBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.item_text, null, false);
         footerTextBinding.textView.setText("START NEW CONNECTION");
         footerTextBinding.getRoot().setOnClickListener(view ->
-            new SearchDeviceDialog(MainActivity.this, bluetoothDevice -> {
-                final TextView monitorTextView = footerTextBinding.textView;
-                monitorTextView.setText("Connecting with " + bluetoothDevice.getName() + " ...");
+                new SearchDeviceDialog(MainActivity.this, bluetoothDevice -> {
+                    final TextView monitorTextView = footerTextBinding.textView;
+                    monitorTextView.setText("Connecting with " + bluetoothDevice.getName() + " ...");
 
-                footerTextBinding.getRoot().setEnabled(false);
-                ticPair.open(bluetoothDevice, new ConnectionStateListener() {
-                    @Override
-                    public void onStateChanged(TIC connection, boolean isConnected, String message) {
-                        footerTextBinding.getRoot().setEnabled(true);
-                        if (isConnected) {
-                            connectedDeviceAdapter.add(connection);
-                            connectedDeviceAdapter.verfiyConnections();
-                            connectedDeviceAdapter.notifyDataSetChanged();
+                    footerTextBinding.getRoot().setEnabled(false);
+                    ticPair.open(bluetoothDevice, new ConnectionStateListener() {
+                        @Override
+                        public void onStateChanged(TIC connection, boolean isConnected, String message) {
+                            footerTextBinding.getRoot().setEnabled(true);
+                            if (isConnected) {
+                                connectedDeviceAdapter.add(connection);
+                                connectedDeviceAdapter.verfiyConnections();
+                                connectedDeviceAdapter.notifyDataSetChanged();
 
-                            monitorTextView.setText("START NEW CONNECTION");
-                            Toast.makeText(MainActivity.this, "CONNECTED SUCCESSFUL WITH :" + bluetoothDevice.getName(), Toast.LENGTH_LONG).show();
-                        } else {
-                            monitorTextView.setText("CONNECT ABORTED : " + message);
-                            Toast.makeText(MainActivity.this, "CONNECTED FAILED CAUSE : " + message, Toast.LENGTH_LONG).show();
+                                monitorTextView.setText("START NEW CONNECTION");
+                                Toast.makeText(MainActivity.this, "CONNECTED SUCCESSFUL WITH :" + bluetoothDevice.getName(), Toast.LENGTH_LONG).show();
+                            } else {
+                                monitorTextView.setText("CONNECT ABORTED : " + message);
+                                Toast.makeText(MainActivity.this, "CONNECTED FAILED CAUSE : " + message, Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onMessage(TIC connection, int bytes, byte[] message) {
-
-                    }
-                });
-            }).show());
+                        @Override
+                        public void onMessage(TIC connection, int bytes, byte[] message) {
+                            new NewMessageDialog(MainActivity.this, connection, new String(message)).show();
+                        }
+                    });
+                }).show());
         binding.connectedDeviceList.addFooterView(footerTextBinding.getRoot());
         binding.connectedDeviceList.setOnItemClickListener((AdapterView<?> adapterView, View view, int i, long l) -> {
-                final DeviceDialog deviceDialog = new DeviceDialog(MainActivity.this, connectedDeviceAdapter.getItem(i));
-                deviceDialog.show();
-            }
+                    final DeviceDialog deviceDialog = new DeviceDialog(MainActivity.this, connectedDeviceAdapter.getItem(i));
+                    deviceDialog.show();
+                }
         );
     }
 
