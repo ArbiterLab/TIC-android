@@ -59,16 +59,37 @@ public class TIC {
                     path = m.getAnnotation(TicAPI.class).value();
                 }
             }
-
             resultJSON.put("path", path);
+
             JSONArray paramsJSON = new JSONArray();
             for (TicParam ticParam : params) {
                 JSONObject param = new JSONObject();
                 param.put(ticParam.getKey(), ticParam.getValue());
                 paramsJSON.put(param);
             }
+            resultJSON.put("params", paramsJSON);
 
-            sendText(paramsJSON.toString());
+            sendText(resultJSON.toString());
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            Log.d("resultParam", e1+"");
+        }
+    }
+
+    public void work(String apiLocation, TicParam... params) {
+        JSONObject resultJSON = new JSONObject();
+        try {
+            resultJSON.put("path", apiLocation);
+
+            JSONArray paramsJSON = new JSONArray();
+            for (TicParam ticParam : params) {
+                JSONObject param = new JSONObject();
+                param.put(ticParam.getKey(), ticParam.getValue());
+                paramsJSON.put(param);
+            }
+            resultJSON.put("params", paramsJSON);
+
+            sendText(resultJSON.toString());
         } catch (Exception e1) {
             e1.printStackTrace();
             Log.d("resultParam", e1+"");

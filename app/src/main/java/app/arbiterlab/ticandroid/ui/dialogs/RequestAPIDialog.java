@@ -60,8 +60,7 @@ public class RequestAPIDialog extends Dialog {
         });
 
         binding.sendButton.setOnClickListener(view -> {
-            ChatModel chatModel = new ChatModel(tic);
-            chatModel.sendMessage(requestParameterAdapter.getParameters());
+            tic.work(binding.apiLocation.getText().toString(), requestParameterAdapter.getParameters());
             dismiss();
         });
     }

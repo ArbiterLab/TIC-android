@@ -11,7 +11,8 @@ import app.arbiterlab.ticandroid.library.interfaces.OnUpdate;
 import app.arbiterlab.ticandroid.library.libs.Constants;
 
 /**
- * Created by Gyeongrok Kim on 2017-09-25.
+ * Created by Gyeongrok K
+ * im on 2017-09-25.
  */
 
 public class ConnectThread extends Thread {
