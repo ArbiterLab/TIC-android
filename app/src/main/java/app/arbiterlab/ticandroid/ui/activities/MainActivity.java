@@ -7,20 +7,25 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import app.arbiterlab.ticandroid.R;
 import app.arbiterlab.ticandroid.databinding.ActivityMainBinding;
+import app.arbiterlab.ticandroid.databinding.ItemTextBinding;
 import app.arbiterlab.ticandroid.library.interfaces.ConnectionStateListener;
 import app.arbiterlab.ticandroid.library.libs.TICPair;
 import app.arbiterlab.ticandroid.library.libs.pair.TIC;
 import app.arbiterlab.ticandroid.library.utils.TICUtils;
+import app.arbiterlab.ticandroid.ui.adapters.ConnectedDeviceAdapter;
+import app.arbiterlab.ticandroid.ui.dialogs.DeviceDialog;
 import app.arbiterlab.ticandroid.ui.dialogs.SearchDeviceDialog;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TICPair mTICPair;
-    private TIC tic;
+    private TICPair ticPair;
+    private ItemTextBinding footerTextBinding;
 
     private ActivityMainBinding binding;
 
@@ -28,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setTitle("");
+        binding.toolbarTitle.setText("Connected Devices");
 
-
-        if (!TICUtils.isNeedPermissionsGranted(this)) {
+        if (!TICUtils.isNeedPermissionsGranted(getApplicationContext())) {
             Toast.makeText(this, "PLEASE TURN ON APPS PERMISSION", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -38,66 +45,71 @@ public class MainActivity extends AppCompatActivity {
         if (!TICUtils.isBluetoothEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, 100);
-            return;
+        } else {
+            ticPair = new TICPair(MainActivity.this);
         }
 
-        binding.searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSearchDeviceDialog();
-            }
-        });
 
-        /*buttonTest.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String sendData = editText.getText().toString();
-                tic.sendText(sendData);
-            }
-        });*/
-    }
+        final ConnectedDeviceAdapter connectedDeviceAdapter = new ConnectedDeviceAdapter(this);
+        binding.connectedDeviceList.setAdapter(connectedDeviceAdapter);
 
-    public void showSearchDeviceDialog() {
-        SearchDeviceDialog searchDeviceDialog = new SearchDeviceDialog(this,
-                new SearchDeviceDialog.OnDeviceSelectedListener() {
+        footerTextBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.item_text, null, false);
+        footerTextBinding.textView.setText("START NEW CONNECTION");
+        footerTextBinding.getRoot().setOnClickListener(view ->
+            new SearchDeviceDialog(MainActivity.this, bluetoothDevice -> {
+                final TextView monitorTextView = footerTextBinding.textView;
+                monitorTextView.setText("Connecting with " + bluetoothDevice.getName() + " ...");
+
+                footerTextBinding.getRoot().setEnabled(false);
+                ticPair.open(bluetoothDevice, new ConnectionStateListener() {
                     @Override
-                    public void onSelected(final BluetoothDevice bluetoothDevice) {
-                        binding.monitorTextView.setText(bluetoothDevice.getName() + "과 연결중..");
-                        final TICPair ticPair = new TICPair(MainActivity.this);
-                        tic = ticPair.open(bluetoothDevice, new ConnectionStateListener() {
-                            @Override
-                            public void onStateChanged(TIC connection, boolean isConnected, String message) {
-                                if (isConnected) {
-                                    binding.monitorTextView.setText(bluetoothDevice.getName() + "와 연결됨");
-                                    Toast.makeText(MainActivity.this, "CONNECTED SUCCESSFUL WITH :" + bluetoothDevice.getName(), Toast.LENGTH_LONG).show();
-                                }else{
-                                    binding.monitorTextView.setText("연결중 에러 발생");
-                                    Toast.makeText(MainActivity.this, "CONNECTED FAILED CAUSE : " + message, Toast.LENGTH_LONG).show();
-                                }
-                            }
+                    public void onStateChanged(TIC connection, boolean isConnected, String message) {
+                        footerTextBinding.getRoot().setEnabled(true);
+                        if (isConnected) {
+                            connectedDeviceAdapter.add(connection);
+                            connectedDeviceAdapter.verfiyConnections();
+                            connectedDeviceAdapter.notifyDataSetChanged();
 
-                            @Override
-                            public void onMessage(TIC connection, int bytes, byte[] message) {
+                            monitorTextView.setText("START NEW CONNECTION");
+                            Toast.makeText(MainActivity.this, "CONNECTED SUCCESSFUL WITH :" + bluetoothDevice.getName(), Toast.LENGTH_LONG).show();
+                        } else {
+                            monitorTextView.setText("CONNECT ABORTED : " + message);
+                            Toast.makeText(MainActivity.this, "CONNECTED FAILED CAUSE : " + message, Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                            }
-                        });
-                        Toast.makeText(MainActivity.this, "SELECTED DEVICE : " + bluetoothDevice.getName(), Toast.LENGTH_LONG).show();
+                    @Override
+                    public void onMessage(TIC connection, int bytes, byte[] message) {
+
                     }
                 });
-        searchDeviceDialog.show();
+            }).show());
+        binding.connectedDeviceList.addFooterView(footerTextBinding.getRoot());
+        binding.connectedDeviceList.setOnItemClickListener((AdapterView<?> adapterView, View view, int i, long l) -> {
+                final DeviceDialog deviceDialog = new DeviceDialog(MainActivity.this, connectedDeviceAdapter.getItem(i));
+                deviceDialog.show();
+            }
+        );
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTICPair != null)
-            mTICPair.detach();
+        if (ticPair != null)
+            ticPair.detach();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK) {
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                ticPair = new TICPair(MainActivity.this);
+            } else {
+                Toast.makeText(MainActivity.this, "BLUETOOTH EN", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 }

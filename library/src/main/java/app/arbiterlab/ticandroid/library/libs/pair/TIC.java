@@ -23,12 +23,7 @@ import app.arbiterlab.ticandroid.library.interfaces.TicAPI;
  */
 
 public class TIC {
-    private Context context;
-    private ConnectionStateListener connectionStateListener;
     private ConnectionContext connectionContext;
-
-
-    private BluetoothSocket sSocket;
 
     public TIC(Context context, BluetoothDevice device, ConnectionStateListener connectionStateListener) {
         if (device == null || connectionStateListener == null)
@@ -42,11 +37,8 @@ public class TIC {
         connectAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
     }
 
-    protected Context getContext() {
-        return context;
-    }
 
-    protected ConnectionContext getConnectionContext() {
+    public ConnectionContext getConnectionContext() {
         return connectionContext;
     }
 

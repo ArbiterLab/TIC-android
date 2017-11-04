@@ -21,7 +21,7 @@ public class SearchDeviceAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<BluetoothDevice> bluetoothDevices = new ArrayList<>();
 
-    public SearchDeviceAdapter(Context context){
+    public SearchDeviceAdapter(Context context) {
         this.context = context;
     }
 
@@ -53,7 +53,15 @@ public class SearchDeviceAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void add(BluetoothDevice bluetoothDevice){
-        bluetoothDevices.add(bluetoothDevice);
+    public boolean isDuplicateDevice(BluetoothDevice targetDevice) {
+        for (BluetoothDevice device : bluetoothDevices) {
+            if (device.getAddress().equals(targetDevice.getAddress())) return true;
+        }
+        return false;
+    }
+
+    public void add(BluetoothDevice bluetoothDevice) {
+        if (!isDuplicateDevice(bluetoothDevice))
+            bluetoothDevices.add(bluetoothDevice);
     }
 }

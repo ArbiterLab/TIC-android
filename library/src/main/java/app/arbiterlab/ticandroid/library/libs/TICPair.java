@@ -68,11 +68,18 @@ public class TICPair {
             }
         };
 
+        if (bluetoothAdapter.isDiscovering())
         bluetoothAdapter.cancelDiscovery();
         bluetoothAdapter.startDiscovery();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         context.registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
         currentSearchReceiver = mReceiver;
+    }
+
+    public void stopSearch(){
+        if (bluetoothAdapter.isDiscovering()){
+            bluetoothAdapter.cancelDiscovery();
+        }
     }
 
     public void detach() {

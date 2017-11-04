@@ -65,7 +65,7 @@ public class ManageThread extends Thread {
                     arr_byte.add(data);
                 }
             } catch (IOException e) {
-                start();
+                onUpdate.OnUpdate(new Update(connectionContext, Constants.RESULT_STATECHANGED, false, "error on listening : " + e));
                 break;
             }
         }

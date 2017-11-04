@@ -24,12 +24,14 @@ import app.arbiterlab.ticandroid.library.libs.TICPair;
 public class SearchDeviceDialog extends Dialog {
 
     private Context context;
+    private TICPair mTICPair;
     private OnDeviceSelectedListener onDeviceSelectedListener;
 
     public SearchDeviceDialog(Context context, OnDeviceSelectedListener onDeviceSelectedListener) {
         super(context);
         this.context = context;
         this.onDeviceSelectedListener = onDeviceSelectedListener;
+        this.mTICPair = new TICPair(context);
     }
 
     @Override
@@ -42,28 +44,21 @@ public class SearchDeviceDialog extends Dialog {
         final ListView deviceListView = findViewById(R.id.deviceList);
         final SearchDeviceAdapter searchDeviceAdapter = new SearchDeviceAdapter(context);
         deviceListView.setAdapter(searchDeviceAdapter);
-        deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onDeviceSelectedListener.onSelected(searchDeviceAdapter.getItem(position));
-                dismiss();
-            }
+        deviceListView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            onDeviceSelectedListener.onSelected(searchDeviceAdapter.getItem(position));
+            dismiss();
         });
 
-        final TICPair mTICPair = new TICPair(context);
-        mTICPair.searchDevices(new OnDeviceDetectedListener() {
-            @Override
-            public void onDetect(BluetoothDevice bluetoothDevice) {
-                searchDeviceAdapter.add(bluetoothDevice);
-                searchDeviceAdapter.notifyDataSetChanged();
-            }
+        mTICPair.searchDevices(bluetoothDevice -> {
+            searchDeviceAdapter.add(bluetoothDevice);
+            searchDeviceAdapter.notifyDataSetChanged();
         });
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-
+        mTICPair.stopSearch();
     }
 
     private void setDialogSize(int width, int height) {

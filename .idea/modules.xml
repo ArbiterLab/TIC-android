@@ -4,10 +4,13 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TIC-android.iml" filepath="$PROJECT_DIR$/TIC-android.iml" />
       <module fileurl="file://D:\TICAndroid\TIC-android.iml" filepath="D:\TICAndroid\TIC-android.iml" />
+      <module fileurl="file://D:\Project\project_android\TIC-android\TIC-android.iml" filepath="D:\Project\project_android\TIC-android\TIC-android.iml" />
       <module fileurl="file://C:\Users\LAINO\Desktop\TIC-android\TICAndroid.iml" filepath="C:\Users\LAINO\Desktop\TIC-android\TICAndroid.iml" />
       <module fileurl="file://D:\TIC-android\TICAndroid.iml" filepath="D:\TIC-android\TICAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Project\project_android\TIC-android\app\app.iml" filepath="D:\Project\project_android\TIC-android\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://D:\Project\project_android\TIC-android\library\library.iml" filepath="D:\Project\project_android\TIC-android\library\library.iml" />
     </modules>
   </component>
 </project>
