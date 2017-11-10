@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 import app.arbiterlab.ticandroid.R;
 import app.arbiterlab.ticandroid.databinding.DialogRequestApiBinding;
 import app.arbiterlab.ticandroid.databinding.ItemTextBinding;
@@ -31,10 +33,18 @@ public class RequestAPIDialog extends Dialog {
     private Context context;
     private TIC tic;
 
+    private ArrayList<TIC> tics;
+
     public RequestAPIDialog(Context context, TIC tic) {
         super(context);
         this.context = context;
         this.tic = tic;
+    }
+
+    public RequestAPIDialog(Context context, ArrayList<TIC> tics) {
+        super(context);
+        this.context = context;
+        this.tics = tics;
     }
 
     @Override
@@ -60,7 +70,13 @@ public class RequestAPIDialog extends Dialog {
         });
 
         binding.sendButton.setOnClickListener(view -> {
-            tic.work(binding.apiLocation.getText().toString(), requestParameterAdapter.getParameters());
+            if (tics == null) {
+                tic.work(binding.apiLocation.getText().toString(), requestParameterAdapter.getParameters());
+            }else{
+                for (TIC targetTic : tics){
+                    targetTic.work(binding.apiLocation.getText().toString(), requestParameterAdapter.getParameters());
+                }
+            }
             dismiss();
         });
     }

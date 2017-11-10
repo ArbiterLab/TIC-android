@@ -80,4 +80,10 @@ public class ConnectedDeviceAdapter extends BaseAdapter {
             }
         }
     }
+
+    public ArrayList<TIC> getAllConnectioncs() {
+        ArrayList<TIC> ticsAr = new ArrayList<>();
+        ticsAr.addAll(tics);
+        return ticsAr;
+    }
 }

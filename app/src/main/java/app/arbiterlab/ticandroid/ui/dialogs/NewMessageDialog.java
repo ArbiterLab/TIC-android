@@ -49,7 +49,7 @@ public class NewMessageDialog extends Dialog {
         final ConnectionContext connectionContext = tic.getConnectionContext();
         final BluetoothDevice bluetoothDevice = connectionContext.getBluetoothDevice();
 
-        binding.deviceName.setText("on " + bluetoothDevice.getName());
+        binding.deviceName.setText("from " + bluetoothDevice.getName());
         binding.textMessage.setText(textMessage);
         binding.confirmButton.setOnClickListener(view -> dismiss());
     }

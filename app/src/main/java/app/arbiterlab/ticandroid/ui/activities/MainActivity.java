@@ -91,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
                     deviceDialog.show();
                 }
         );
+
+        binding.fab.setOnClickListener(view -> new DeviceDialog(MainActivity.this, connectedDeviceAdapter.getAllConnectioncs()).show());
+
+
     }
 
 

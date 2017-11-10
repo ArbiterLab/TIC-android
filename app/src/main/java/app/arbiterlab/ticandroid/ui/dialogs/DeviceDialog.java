@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 import app.arbiterlab.ticandroid.R;
 import app.arbiterlab.ticandroid.databinding.DialogDeviceBinding;
 import app.arbiterlab.ticandroid.library.datas.ConnectionContext;
@@ -34,10 +36,18 @@ public class DeviceDialog extends Dialog {
     private Context context;
     private TIC tic;
 
+    private ArrayList<TIC> tics;
+
     public DeviceDialog(Context context, TIC tic) {
         super(context);
         this.context = context;
         this.tic = tic;
+    }
+
+    public DeviceDialog(Context context, ArrayList<TIC> tics){
+        super(context);
+        this.context = context;
+        this.tics = tics;
     }
 
     @Override
@@ -49,13 +59,23 @@ public class DeviceDialog extends Dialog {
         setContentView(binding.getRoot());
         setDialogSize(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        final ConnectionContext connectionContext = tic.getConnectionContext();
-        final BluetoothDevice bluetoothDevice = connectionContext.getBluetoothDevice();
+        if (tics == null){
+            final ConnectionContext connectionContext = tic.getConnectionContext();
+            final BluetoothDevice bluetoothDevice = connectionContext.getBluetoothDevice();
 
-        binding.deviceName.setText(bluetoothDevice.getName());
-        binding.deviceAddress.setText(bluetoothDevice.getAddress());
-        binding.deviceUUID.setText(bluetoothDevice.getUuids().toString());
-        binding.sendButton.setOnClickListener(view -> new RequestAPIDialog(context, tic).show());
+            binding.deviceName.setText(bluetoothDevice.getName());
+            binding.deviceAddress.setText(bluetoothDevice.getAddress());
+            binding.deviceUUID.setText(bluetoothDevice.getUuids().toString());
+            binding.sendButton.setOnClickListener(view -> new RequestAPIDialog(context, tic).show());
+        }else{
+            TIC stTic = tics.get(0);
+            final ConnectionContext stContext = stTic.getConnectionContext();
+            final BluetoothDevice stDevice = stContext.getBluetoothDevice();
+
+            binding.deviceName.setText(stDevice.getName() + "and "+ (tics.size() - 1) + " devices");
+            binding.deviceAddress.setText("with multiple devices");
+            binding.sendButton.setOnClickListener(view -> new RequestAPIDialog(context, tics).show());
+        }
     }
 
 
