@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -68,6 +69,11 @@ public class DeviceDialog extends Dialog {
             binding.deviceUUID.setText(bluetoothDevice.getUuids().toString());
             binding.sendButton.setOnClickListener(view -> new RequestAPIDialog(context, tic).show());
         }else{
+            if (tics.size() < 1) {
+                Toast.makeText(context, "At least one device must be connected", Toast.LENGTH_SHORT).show();
+                DeviceDialog.this.dismiss();
+                return;
+            }
             TIC stTic = tics.get(0);
             final ConnectionContext stContext = stTic.getConnectionContext();
             final BluetoothDevice stDevice = stContext.getBluetoothDevice();
